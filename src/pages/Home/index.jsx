@@ -4,14 +4,14 @@ import TextField, { Input } from "@material/react-text-field";
 import MaterialIcon from "@material/react-material-icon";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
 import restaurante from "../../assets/restaurante-fake.png";
 import logo from "../../assets/logo.svg";
-import { Card } from '../../components';
+import { Card, RestauranteCard, Modal } from '../../components';
 
 
 const Home = () => {
   const [inputValue, setInputValue] = useState("");
+  const [abrirModal, setModalAberto] = useState(false);
 
   const settings = {
     dots: false,
@@ -49,8 +49,11 @@ const Home = () => {
             <Card photo={restaurante} title='restaurantes'/>
            
           </Carousel>
+          <button onClick={() => setModalAberto(true)}>Abrir</button>
         </Pesquisa>
+        <RestauranteCard />
       </Container>
+      <Modal open={abrirModal} onClose={() => setModalAberto(!abrirModal)} />
     </Wrapper>
   );
 };

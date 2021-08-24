@@ -23,6 +23,7 @@ export const Pesquisa = styled.section`
 
 export const Logo = styled.img`
   margin-bottom: 15px;
+  
 `;
 
 export const CarouselTitle = styled.h1`
