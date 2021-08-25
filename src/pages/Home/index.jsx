@@ -6,12 +6,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import restaurante from "../../assets/restaurante-fake.png";
 import logo from "../../assets/logo.svg";
-import { Card, RestauranteCard, Modal } from '../../components';
-
+import { Card, RestauranteCard, Modal, Map } from '../../components';
 
 const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [abrirModal, setModalAberto] = useState(false);
+  const [query,setQuery] = useState(null);
 
   const settings = {
     dots: false,
@@ -21,6 +21,13 @@ const Home = () => {
     slidesToScroll: 4,
     adaptiveHeight: true,
   };
+
+  function handleKeyPress (e) {
+    if (e.key === 'Enter') {
+      setQuery(inputValue)
+    }
+  }
+
   return (
     <Wrapper>
       <Container>
@@ -32,8 +39,7 @@ const Home = () => {
             trailingIcon={<MaterialIcon role="button" icon="search" />}
           >
             <Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              value={inputValue} onKeyPress={handleKeyPress} onChange={(e) => setInputValue(e.target.value)}
             />
           </TextField>
           <CarouselTitle>Na sua Area</CarouselTitle>
@@ -53,6 +59,7 @@ const Home = () => {
         </Pesquisa>
         <RestauranteCard />
       </Container>
+      <Map query={query} />
       <Modal open={abrirModal} onClose={() => setModalAberto(!abrirModal)} />
     </Wrapper>
   );
