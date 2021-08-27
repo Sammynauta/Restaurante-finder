@@ -6,6 +6,8 @@ import {
   Logo,
   Wrapper,
   CarouselTitle,
+  ModalTitle,
+  ModalContent,
 } from "./styles";
 import TextField, { Input } from "@material/react-text-field";
 import MaterialIcon from "@material/react-material-icon";
@@ -20,12 +22,14 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [abrirModal, setModalAberto] = useState(false);
   const [query, setQuery] = useState(null);
-  const { restaurants } = useSelector((state) => state.restaurants);
+  const [placeId, setPlaceId] =useState(null);
+  const { restaurants, restaurantSelected } = useSelector((state) => state.restaurants);
 
   const settings = {
     dots: false,
     infinite: true,
-    speed: 400,
+    speed: 300,
+    autoplay: true,
     slidesToShow: 4,
     slidesToScroll: 4,
     adaptiveHeight: true,
@@ -35,6 +39,11 @@ const Home = () => {
     if (e.key === "Enter") {
       setQuery(inputValue);
     }
+  }
+
+  function handleOpenModal (placeId) {
+    setPlaceId(placeId);
+    setModalAberto(true);
   }
 
   return (
@@ -69,11 +78,16 @@ const Home = () => {
           </Carousel>
         </Pesquisa>
         {restaurants.map((restaurant) => (
-          <RestauranteCard restaurant={restaurant} />
+          <RestauranteCard onClick={() => handleOpenModal(restaurant.place_id)} restaurant={restaurant} />
         ))}
       </Container>
-      <Map query={query} />
-      <Modal open={abrirModal} onClose={() => setModalAberto(!abrirModal)} />
+      <Map query={query} placeId={placeId} />
+      <Modal open={abrirModal} onClose={() => setModalAberto(!abrirModal)} >
+        <ModalTitle>{restaurantSelected?.name}</ModalTitle>
+        <ModalContent>{restaurantSelected?.formatted_phone_number}</ModalContent>
+        <ModalContent>{restaurantSelected?.formatted_address}</ModalContent>
+        <ModalContent>{restaurantSelected?.opening_hours?.open_now ? 'Aberto agora' : 'Fechado neste momento'}</ModalContent>
+      </Modal>
     </Wrapper>
   );
 };
