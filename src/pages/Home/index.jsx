@@ -16,14 +16,16 @@ import "slick-carousel/slick/slick-theme.css";
 import restaurante from "../../assets/restaurante-fake.png";
 import logo from "../../assets/logo.svg";
 import { useSelector } from "react-redux";
-import { Card, RestauranteCard, Modal, Map } from "../../components";
+import { Card, RestauranteCard, Modal, Map, Loader, Skeleton } from "../../components";
 
 const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [abrirModal, setModalAberto] = useState(false);
   const [query, setQuery] = useState(null);
-  const [placeId, setPlaceId] =useState(null);
-  const { restaurants, restaurantSelected } = useSelector((state) => state.restaurants);
+  const [placeId, setPlaceId] = useState(null);
+  const { restaurants, restaurantSelected } = useSelector(
+    (state) => state.restaurants
+  );
 
   const settings = {
     dots: false,
@@ -41,7 +43,7 @@ const Home = () => {
     }
   }
 
-  function handleOpenModal (placeId) {
+  function handleOpenModal(placeId) {
     setPlaceId(placeId);
     setModalAberto(true);
   }
@@ -62,31 +64,59 @@ const Home = () => {
               onChange={(e) => setInputValue(e.target.value)}
             />
           </TextField>
-          <CarouselTitle>Na sua Area</CarouselTitle>
-          <Carousel {...settings}>
-            {restaurants.map((restaurant) => (
-              <Card
-                key={restaurant.place_id}
-                photo={
-                  restaurant.photos
-                    ? restaurant.photos[0].getUrl()
-                    : restaurante
-                }
-                title={restaurant.name}
-              />
-            ))}
-          </Carousel>
+          {restaurants.lenght > 0 ? (
+            <>
+              <CarouselTitle>Na sua Area</CarouselTitle>
+              <Carousel {...settings}>
+                {restaurants.map((restaurant) => (
+                  <Card
+                    key={restaurant.place_id}
+                    photo={
+                      restaurant.photos
+                        ? restaurant.photos[0].getUrl()
+                        : restaurante
+                    }
+                    title={restaurant.name}
+                  />
+                ))}
+              </Carousel>
+              /
+            </>
+          ) : (
+            <Loader />
+          )}
         </Pesquisa>
         {restaurants.map((restaurant) => (
-          <RestauranteCard onClick={() => handleOpenModal(restaurant.place_id)} restaurant={restaurant} />
+          <RestauranteCard
+            onClick={() => handleOpenModal(restaurant.place_id)}
+            restaurant={restaurant}
+          />
         ))}
       </Container>
       <Map query={query} placeId={placeId} />
-      <Modal open={abrirModal} onClose={() => setModalAberto(!abrirModal)} >
-        <ModalTitle>{restaurantSelected?.name}</ModalTitle>
-        <ModalContent>{restaurantSelected?.formatted_phone_number}</ModalContent>
+      <Modal open={abrirModal} onClose={() => setModalAberto(!abrirModal)}>
+        {restaurantSelected ? (
+          <>
+          <ModalTitle>{restaurantSelected?.name}</ModalTitle>
+        <ModalContent>
+          {restaurantSelected?.formatted_phone_number}
+        </ModalContent>
         <ModalContent>{restaurantSelected?.formatted_address}</ModalContent>
-        <ModalContent>{restaurantSelected?.opening_hours?.open_now ? 'Aberto agora' : 'Fechado neste momento'}</ModalContent>
+        <ModalContent>
+          {restaurantSelected?.opening_hours?.open_now
+            ? "Aberto agora"
+            : "Fechado neste momento"}
+        </ModalContent>
+          </>
+        ) : (
+          <>
+          <Skeleton width='10px' height='10px' />
+          <Skeleton width='7px' height='10px' />
+          <Skeleton width='5px' height='10px' />
+          <Skeleton width='5px' height='10px' />
+          </>
+        )}
+        
       </Modal>
     </Wrapper>
   );
