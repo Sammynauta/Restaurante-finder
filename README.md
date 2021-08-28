@@ -1,3 +1,20 @@
+<h1 align="center">✨Restaurante Finder✨ </h1>
+
+<img src='src/assets/slide2.png'>
+
+<hr>
+
+## Sobre o projeto 
+
+-  Nesse projeto o objetivo foi construir um sistema web de busca de restaurantes, parecido com o serviço que o Google oferece. Nele procurei desenvolver esse buscador usando React.JS e API do Google.
+
+- A estrutura basica como mostra a imagem acima é composta por uma barra
+lateral com carousel e cards, onde mostra os restaurantes proximos e pesquisados pelo o usuario.
+
+- Projeto feito com guia de professores da Digital Innovation One.
+
+<img src='src/assets/slide1.png'>
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
